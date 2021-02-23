@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="sortbyfield" addfieldpath="/plugins/system/sortbyfield/fields">
+        <fieldset name="sortbyfield"
+                  label="PLG_SYSTEM_SORTBYFIELD_FIELDSET_HEAD"
+
+        >
+            <field
+                    name="field"
+                    type="customfield"
+                    label="PLG_SYSTEM_SORTBYFIELD_FIELD_LABEL"
+                    description="PLG_SYSTEM_SORTBYFIELD_FIELD_DESC"
+            >
+            </field>
+
+            <field
+                    name="ordering"
+                    type="list"
+                    label="JGLOBAL_ORDER_DIRECTION_LABEL"
+                    description="JGLOBAL_ORDER_DIRECTION_DESC"
+            >
+                <option value="ASC">JGLOBAL_ORDER_ASCENDING</option>
+                <option value="DESC">JGLOBAL_ORDER_DESCENDING</option>
+            </field>
+
+        </fieldset>
+    </fields>
+</form>

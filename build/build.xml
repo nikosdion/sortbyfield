@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<project name="SortByFields" description="SortByFields" default="git" >
+	<import file="${phing.dir}/../../buildfiles/phing/common.xml" />
+
+	<!--
+	====================================================================================================
+	Build customization
+	====================================================================================================
+	-->
+	<target name="package-pkg" description="Installation package" depends="new-release, setup-properties, package-plugins">
+
+		<!-- Dependencies are enough -->
+
+	</target>
+
+	<!--
+	Internal builder task to build one plugin installation package at a time
+	-->
+	<target name="package-plugin-item" description="Package a single plugin">
+		<echo message="Packaging plugin ${plugin_area}/${plugin_name}" />
+
+		<property name="plugin_package" value="${dirs.release}/plg_${plugin_area}_${plugin_name}-${version}.zip" />
+
+		<zipme basedir="${plugin_dir}" destfile="${plugin_package}" includeemptydirs="true">
+			<fileset dir="${plugin_dir}">
+				<include name="**" />
+			</fileset>
+		</zipme>
+	</target>
+
+
+	<!--
+	====================================================================================================
+	Tasks - Documentation
+	====================================================================================================
+	-->
+
+	<target name="documentation" description="The documentation">
+		<echo message="The documentation can be found in the repository's Wiki on GitHub. This task is obsolete." />
+	</target>
+
+	<!--
+	====================================================================================================
+	Tasks - Project management
+	====================================================================================================
+	-->
+
+	<target name="docsdeploy">
+		<echo message="The documentation can be found in the repository's Wiki on GitHub. This task is obsolete." />
+	</target>
+</project>
