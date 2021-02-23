@@ -9,7 +9,7 @@
 <extension version="3.9.0" type="plugin" group="system" method="upgrade">
     <name>PLG_SYSTEM_SORTBYFIELD</name>
     <version>1.0.0</version>
-    <creationDate>2020-12-29</creationDate>
+    <creationDate>2021-02-23</creationDate>
 
     <author>Nicholas K. Dionysopoulos</author>
     <authorEmail>no-reply@dionysopoulos.me</authorEmail>
