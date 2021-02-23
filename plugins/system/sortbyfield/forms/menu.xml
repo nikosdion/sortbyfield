@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--~
+  ~ * @project   sortbyfield
+  ~ * @license   GPLv3
+  ~ * @copyright Copyright (c) 2021 Nicholas K. Dionysopoulos
+  -->
+
 <form>
     <fields name="sortbyfield" addfieldpath="/plugins/system/sortbyfield/fields">
         <fieldset name="sortbyfield"

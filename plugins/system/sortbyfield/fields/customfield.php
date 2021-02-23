@@ -1,4 +1,10 @@
 <?php
+/**
+ *  @project   sortbyfield
+ *  @license   GPLv3
+ *  @copyright Copyright (c) 2021 Nicholas K. Dionysopoulos
+ */
+
 // Prevent direct access
 defined('_JEXEC') || die;
 

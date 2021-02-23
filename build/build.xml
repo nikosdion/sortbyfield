@@ -1,5 +1,11 @@
 <?xml version="1.0"?>
 
+<!--~
+  ~ * @project   sortbyfield
+  ~ * @license   GPLv3
+  ~ * @copyright Copyright (c) 2021 Nicholas K. Dionysopoulos
+  -->
+
 <project name="SortByFields" description="SortByFields" default="git" >
 	<import file="${phing.dir}/../../buildfiles/phing/common.xml" />
 

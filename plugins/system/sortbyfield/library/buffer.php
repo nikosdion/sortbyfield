@@ -1,8 +1,8 @@
 <?php
 /**
- * @package   MailMagic
- * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos
- * @license   GNU General Public License version 3, or later
+ *  @project   sortbyfield
+ *  @license   GPLv3
+ *  @copyright Copyright (c) 2021 Nicholas K. Dionysopoulos
  */
 
 defined('_JEXEC') or die;
