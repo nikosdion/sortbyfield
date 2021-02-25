@@ -50,7 +50,7 @@ class JFormFieldCustomField extends JFormFieldGroupedList
 			])
 			->from($db->qn('#__fields', 'f'))
 			->leftJoin(
-				$db->qn('dev31_fields_groups', 'g') . ' ON(' .
+				$db->qn('#__fields_groups', 'g') . ' ON(' .
 				$db->qn('g.id') . ' = ' . $db->qn('f.group_id') . ')'
 			)
 			->where(
