@@ -189,6 +189,8 @@ PHP;
 		}
 
 		$this->orderByCustomField($query, $fieldId, $sortOrder);
+
+		//echo $query->dump(); die;
 	}
 
 	/**
@@ -206,11 +208,11 @@ PHP;
 	{
 		$query->leftJoin(
 			$query->qn('#__fields_values', 'jcsv' . $fieldId) . ' ON(' .
-			$query->qn(sprintf('jcsv%d.item_id', $fieldId)) . ' = ' .
-			$query->qn('a.id') . ')'
-		)
-			->where($query->qn(sprintf('jcsv%d.field_id', $fieldId)) . ' = '
-				. $query->q($fieldId));
+			$query->qn(sprintf('jcsv%d.item_id', $fieldId)) . ' = ' . $query->qn('a.id')
+			. ' AND ' .
+			$query->qn(sprintf('jcsv%d.field_id', $fieldId)) . ' = ' . $query->q($fieldId) .
+			')'
+		);
 
 		/** @var JDatabaseQueryElement $order */
 		$order       = $query->order;
