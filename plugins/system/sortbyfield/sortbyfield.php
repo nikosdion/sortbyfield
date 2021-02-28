@@ -189,8 +189,6 @@ PHP;
 		}
 
 		$this->orderByCustomField($query, $fieldId, $sortOrder);
-
-		//echo $query->dump(); die;
 	}
 
 	/**
