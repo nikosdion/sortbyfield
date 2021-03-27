@@ -1,8 +1,8 @@
 <?php
 /**
- *  @project   sortbyfield
- *  @license   GPLv3
- *  @copyright Copyright (c) 2021 Nicholas K. Dionysopoulos
+ * @project   sortbyfield
+ * @license   GPLv3
+ * @copyright Copyright (c) 2021 Nicholas K. Dionysopoulos
  */
 
 defined('_JEXEC') || die;
@@ -180,7 +180,18 @@ PHP;
 			return;
 		}
 
-		$fieldId = $currentItem->getParams()->get('sortbyfield.field', '');
+		/**
+		 * Addresses the case where com_content tries to get articles but there is no menu item present. We randomly saw
+		 * this happen on a com_ajax(!!!) request because Joomla tried to render the latest articles modules regardless.
+		 * Of course Joomla should not be rendering modules in this case but, hey, it's Joomla — it does weird stuff
+		 * like this.
+		 */
+		if (empty($currentItem))
+		{
+			return;
+		}
+
+		$fieldId   = $currentItem->getParams()->get('sortbyfield.field', '');
 		$sortOrder = $currentItem->getParams()->get('sortbyfield.ordering', 'ASC');
 
 		if (!$fieldId)
