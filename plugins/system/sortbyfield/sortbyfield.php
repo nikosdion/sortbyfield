@@ -63,18 +63,18 @@ class plgSystemSortbyfield extends CMSPlugin
 		// Import the appropriate plugin group.
 		\JPluginHelper::importPlugin('content');
 
-		// Get the dispatcher.
-		\$dispatcher = \JEventDispatcher::getInstance();
+		// Get the app.
+		\$app = \Joomla\CMS\Factory::getApplication();
 
 		// Trigger the form preparation event.
-		\$dispatcher->trigger('onComContentArticlesGetListQuery', [&\$query]);
+		\$app->triggerEvent('onComContentArticlesGetListQuery', [&\$query]);
 
 		return \$query;
 PHP;
 		$phpContent = file_get_contents($source);
 		$phpContent = str_replace('return $query;', $foobar, $phpContent);
 
-		$bufferLocation = 'plgSystemSortbyfieldsBuffer://plgSystemMailmagicBufferMail.php';
+		$bufferLocation = 'plgSystemSortbyfieldsBuffer://plgSystemSortbyfieldsBuffer.php';
 
 		file_put_contents($bufferLocation, $phpContent);
 
@@ -84,7 +84,7 @@ PHP;
 	public function onContentPrepareForm(Form $form, $data): bool
 	{
 		$this->loadLanguage();
-		$this->loadLanguage('plg_system_socialmagick.sys');
+		$this->loadLanguage('plg_system_sortbyfield.sys');
 
 		Form::addFormPath(__DIR__ . '/forms');
 
