@@ -84,7 +84,7 @@ PHP;
 	public function onContentPrepareForm(Form $form, $data): bool
 	{
 		$this->loadLanguage();
-		$this->loadLanguage('plg_system_socialmagick.sys');
+		$this->loadLanguage('plg_system_sortbyfield.sys');
 
 		Form::addFormPath(__DIR__ . '/forms');
 
