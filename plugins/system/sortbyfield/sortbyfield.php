@@ -102,7 +102,7 @@ PHP;
 	public function onContentBeforeSave(?string $context, $table, $isNew = false, $data = null): bool
 	{
 		// Joomla 4 Media Manager freaks out when the plugin is enabled; skip this plugin if the context is com_media.
-		if(str_contains($context,'com_media')) {
+		if (substr($context, 0, 10) === 'com_media.') {
 			return true;
 		}
 		// Joomla 3 does not pass the data from com_menus. Therefore, we have to fake it.
