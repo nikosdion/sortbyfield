@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--~
-  ~ * @project   sortbyfield
-  ~ * @license   GPLv3
-  ~ * @copyright Copyright (c) 2021 Nicholas K. Dionysopoulos
+  ~  @project   sortbyfield
+  ~  @license   GPLv3
+  ~  @copyright Copyright (c) 2021-2023 Nicholas K. Dionysopoulos
   -->
 
-<extension version="3.9.0" type="plugin" group="system" method="upgrade">
+<extension type="plugin" group="system" method="upgrade">
     <name>PLG_SYSTEM_SORTBYFIELD</name>
     <version>1.0.2</version>
     <creationDate>2021-03-27</creationDate>

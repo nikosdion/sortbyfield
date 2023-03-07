@@ -1,8 +1,8 @@
 <?php
 /**
- * @project   sortbyfield
- * @license   GPLv3
- * @copyright Copyright (c) 2021 Nicholas K. Dionysopoulos
+ *  @project   sortbyfield
+ *  @license   GPLv3
+ *  @copyright Copyright (c) 2021-2023 Nicholas K. Dionysopoulos
  */
 
 defined('_JEXEC') || die;
