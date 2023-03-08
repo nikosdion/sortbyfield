@@ -1,46 +1,55 @@
 <?php
 /**
- *  @project   sortbyfield
- *  @license   GPLv3
- *  @copyright Copyright (c) 2021 Nicholas K. Dionysopoulos
+ * @project   sortbyfield
+ * @license   GPLv3
+ * @copyright Copyright (c) 2021-2023 Nicholas K. Dionysopoulos
  */
 
-defined('_JEXEC') or die;
+namespace Dionysopoulos\Plugin\System\SortByField;
+
+defined('_JEXEC') || die;
 
 /**
  * Registers a plgSystemSortbyfieldsBuffer:// stream wrapper
+ *
+ * @since 1.0.0
  */
-class plgSystemSortbyfieldsBuffer
+class Buffer
 {
 	/**
 	 * Buffer hash
 	 *
 	 * @var    array
+	 * @since   1.0.0
 	 */
-	public static $buffers = [];
+	public static array $buffers = [];
 
-	public static $canRegisterWrapper = null;
+	public static ?bool $canRegisterWrapper = null;
 
 	/**
 	 * Stream position
 	 *
 	 * @var    integer
+	 * @since   1.0.0
 	 */
-	public $position = 0;
+	public int $position = 0;
 
 	/**
 	 * Buffer name
 	 *
-	 * @var    string
+	 * @var    string|null
+	 * @since   1.0.0
 	 */
-	public $name = null;
+	public ?string $name = null;
 
 	/**
 	 * Should I register the plgSystemSortbyfieldsBuffer:// stream wrapper
 	 *
 	 * @return  bool  True if the stream wrapper can be registered
+	 *
+	 * @since   1.0.0
 	 */
-	public static function canRegisterWrapper()
+	public static function canRegisterWrapper(): bool
 	{
 		if (is_null(static::$canRegisterWrapper))
 		{
@@ -125,17 +134,20 @@ class plgSystemSortbyfieldsBuffer
 	/**
 	 * Function to open file or url
 	 *
-	 * @param   string   $path          The URL that was passed
-	 * @param   string   $mode          Mode used to open the file @see fopen
-	 * @param   integer  $options       Flags used by the API, may be STREAM_USE_PATH and
-	 *                                  STREAM_REPORT_ERRORS
-	 * @param   string  &$opened_path   Full path of the resource. Used with STREAM_USE_PATH option
+	 * @param   string       $path         The URL that was passed
+	 * @param   string       $mode         Mode used to open the file @see fopen
+	 * @param   integer      $options      Flags used by the API, may be STREAM_USE_PATH and
+	 *                                     STREAM_REPORT_ERRORS
+	 * @param   string|null  $opened_path  Full path of the resource. Used with STREAM_USE_PATH option
 	 *
 	 * @return  boolean
+	 * @since        1.0.0
 	 *
-	 * @see     streamWrapper::stream_open
+	 * @see          streamWrapper::stream_open
+	 * @noinspection PhpUnused
+	 * @noinspection PhpUnusedParameterInspection
 	 */
-	public function stream_open($path, $mode, $options, &$opened_path)
+	public function stream_open(string $path, string $mode, int $options, ?string &$opened_path): bool
 	{
 		$url            = parse_url($path);
 		$this->name     = $url['host'] . ($url['path'] ?? '');
@@ -149,12 +161,18 @@ class plgSystemSortbyfieldsBuffer
 		return true;
 	}
 
-	public function stream_set_option($option, $arg1 = null, $arg2 = null)
+	/**
+	 * @noinspection PhpUnused
+	 * @noinspection PhpUnusedParameterInspection
+	 *
+	 * @since        1.0.0
+	 */
+	public function stream_set_option($option, $arg1 = null, $arg2 = null): bool
 	{
 		return false;
 	}
 
-	public function unlink($path)
+	public function unlink(string $path): void
 	{
 		$url  = parse_url($path);
 		$name = $url['host'];
@@ -165,7 +183,11 @@ class plgSystemSortbyfieldsBuffer
 		}
 	}
 
-	public function stream_stat()
+	/**
+	 * @noinspection PhpUnused
+	 * @since        1.0.0
+	 */
+	public function stream_stat(): array
 	{
 		return [
 			'dev'     => 0,
@@ -189,14 +211,15 @@ class plgSystemSortbyfieldsBuffer
 	 *
 	 * @param   integer  $count  How many bytes of data from the current position should be returned.
 	 *
-	 * @return  mixed    The data from the stream up to the specified number of bytes (all data if
+	 * @return  string    The data from the stream up to the specified number of bytes (all data if
 	 *                   the total number of bytes in the stream is less than $count. Null if
 	 *                   the stream is empty.
 	 *
-	 * @see     streamWrapper::stream_read
-	 * @since   11.1
+	 * @see          streamWrapper::stream_read
+	 * @since        1.0.0
+	 * @noinspection PhpUnused
 	 */
-	public function stream_read($count)
+	public function stream_read(int $count): string
 	{
 		$ret            = substr(static::$buffers[$this->name], $this->position, $count);
 		$this->position += strlen($ret);
@@ -211,10 +234,11 @@ class plgSystemSortbyfieldsBuffer
 	 *
 	 * @return  integer
 	 *
-	 * @see     streamWrapper::stream_write
-	 * @since   11.1
+	 * @see          streamWrapper::stream_write
+	 * @since        1.0.0
+	 * @noinspection PhpUnused
 	 */
-	public function stream_write($data)
+	public function stream_write(string $data): int
 	{
 		$left                         = substr(static::$buffers[$this->name], 0, $this->position);
 		$right                        = substr(static::$buffers[$this->name], $this->position + strlen($data));
@@ -229,10 +253,11 @@ class plgSystemSortbyfieldsBuffer
 	 *
 	 * @return  integer
 	 *
-	 * @see     streamWrapper::stream_tell
-	 * @since   11.1
+	 * @see          streamWrapper::stream_tell
+	 * @since        1.0.0
+	 * @noinspection PhpUnused
 	 */
-	public function stream_tell()
+	public function stream_tell(): int
 	{
 		return $this->position;
 	}
@@ -242,10 +267,11 @@ class plgSystemSortbyfieldsBuffer
 	 *
 	 * @return  boolean  True if the pointer is at the end of the stream
 	 *
-	 * @see     streamWrapper::stream_eof
-	 * @since   11.1
+	 * @see          streamWrapper::stream_eof
+	 * @since        1.0.0
+	 * @noinspection PhpUnused
 	 */
-	public function stream_eof()
+	public function stream_eof(): bool
 	{
 		return $this->position >= strlen(static::$buffers[$this->name]);
 	}
@@ -259,10 +285,11 @@ class plgSystemSortbyfieldsBuffer
 	 *
 	 * @return  boolean  True if updated
 	 *
-	 * @see     streamWrapper::stream_seek
-	 * @since   11.1
+	 * @see          streamWrapper::stream_seek
+	 * @since        1.0.0
+	 * @noinspection PhpUnused
 	 */
-	public function stream_seek($offset, $whence)
+	public function stream_seek(int $offset, int $whence): bool
 	{
 		switch ($whence)
 		{
@@ -273,11 +300,8 @@ class plgSystemSortbyfieldsBuffer
 
 					return true;
 				}
-				else
-				{
-					return false;
-				}
-				break;
+
+				return false;
 
 			case SEEK_CUR:
 				if ($offset >= 0)
@@ -286,11 +310,8 @@ class plgSystemSortbyfieldsBuffer
 
 					return true;
 				}
-				else
-				{
-					return false;
-				}
-				break;
+
+				return false;
 
 			case SEEK_END:
 				if (strlen(static::$buffers[$this->name]) + $offset >= 0)
@@ -299,11 +320,8 @@ class plgSystemSortbyfieldsBuffer
 
 					return true;
 				}
-				else
-				{
-					return false;
-				}
-				break;
+
+				return false;
 
 			default:
 				return false;
@@ -311,7 +329,7 @@ class plgSystemSortbyfieldsBuffer
 	}
 }
 
-if (plgSystemSortbyfieldsBuffer::canRegisterWrapper())
+if (Buffer::canRegisterWrapper())
 {
-	stream_wrapper_register('plgSystemSortbyfieldsBuffer', 'plgSystemSortbyfieldsBuffer');
+	stream_wrapper_register('plgSystemSortbyfieldsBuffer', Buffer::class);
 }

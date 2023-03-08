@@ -1,26 +1,24 @@
 <?php
 /**
- *  @project   sortbyfield
- *  @license   GPLv3
- *  @copyright Copyright (c) 2021 Nicholas K. Dionysopoulos
+ * @project   sortbyfield
+ * @license   GPLv3
+ * @copyright Copyright (c) 2021-2023 Nicholas K. Dionysopoulos
  */
+
+namespace Dionysopoulos\Plugin\System\SortByField\Field;
 
 // Prevent direct access
 defined('_JEXEC') || die;
 
+use Exception;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Form\Field\GroupedlistField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\Database\DatabaseDriver;
+use UnexpectedValueException;
 
-if (class_exists('JFormFieldCustomField'))
-{
-	return;
-}
-
-FormHelper::loadFieldClass('groupedlist');
-
-class JFormFieldCustomField extends JFormFieldGroupedList
+class JoomlafieldField extends GroupedlistField
 {
 	/**
 	 * The form field type.
@@ -28,7 +26,7 @@ class JFormFieldCustomField extends JFormFieldGroupedList
 	 * @var   string
 	 * @since 1.0.0
 	 */
-	protected $type = 'CustomField';
+	protected $type = 'Joomlafield';
 
 	/**
 	 * Method to get the field option groups.
@@ -39,9 +37,10 @@ class JFormFieldCustomField extends JFormFieldGroupedList
 	 * @since   1.0.0
 	 *
 	 */
-	public function getGroups()
+	public function getGroups(): array
 	{
-		$db = Factory::getDbo();
+		/** @var DatabaseDriver $db */
+		$db    = Factory::getContainer()->get('DatabaseDriver');
 		$query = $db->getQuery(true)
 			->select([
 				$db->qn('g.title', 'gtitle'),
@@ -64,20 +63,20 @@ class JFormFieldCustomField extends JFormFieldGroupedList
 		{
 			$fieldData = $db->setQuery($query)->loadAssocList();
 		}
-		catch (Exception $e)
+		catch (Exception)
 		{
 			return [];
 		}
 
 		$groups = [
 			'' => [
-				HTMLHelper::_('select.option', 0, Text::_('JNONE'))
-			]
+				HTMLHelper::_('select.option', 0, Text::_('JNONE')),
+			],
 		];
 
 		foreach ($fieldData as $fieldDatum)
 		{
-			$groupName = $fieldDatum['gtitle'] ?? '';
+			$groupName          = $fieldDatum['gtitle'] ?? '';
 			$groups[$groupName] = $groups[$groupName] ?? [];
 
 			$groups[$groupName][] = HTMLHelper::_('select.option', $fieldDatum['id'], $fieldDatum['title']);

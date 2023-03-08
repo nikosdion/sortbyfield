@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--~
-  ~ * @project   sortbyfield
-  ~ * @license   GPLv3
-  ~ * @copyright Copyright (c) 2021 Nicholas K. Dionysopoulos
+  ~  @project   sortbyfield
+  ~  @license   GPLv3
+  ~  @copyright Copyright (c) 2021-2023 Nicholas K. Dionysopoulos
   -->
 
 <form>
-    <fields name="sortbyfield" addfieldpath="/plugins/system/sortbyfield/fields">
+    <fields name="sortbyfield" addfieldprefix="Dionysopoulos\Plugin\System\SortByField\Field">
         <fieldset name="sortbyfield"
                   label="PLG_SYSTEM_SORTBYFIELD_FIELDSET_HEAD"
 
         >
             <field
                     name="field"
-                    type="customfield"
+                    type="Joomlafield"
                     label="PLG_SYSTEM_SORTBYFIELD_FIELD_LABEL"
                     description="PLG_SYSTEM_SORTBYFIELD_FIELD_DESC"
             >
@@ -28,7 +28,6 @@
                 <option value="ASC">JGLOBAL_ORDER_ASCENDING</option>
                 <option value="DESC">JGLOBAL_ORDER_DESCENDING</option>
             </field>
-
         </fieldset>
     </fields>
 </form>

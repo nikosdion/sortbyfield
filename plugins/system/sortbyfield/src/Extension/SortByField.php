@@ -2,19 +2,25 @@
 /**
  * @project   sortbyfield
  * @license   GPLv3
- * @copyright Copyright (c) 2021 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c) 2021-2023 Nicholas K. Dionysopoulos
  */
+
+namespace Dionysopoulos\Plugin\System\SortByField\Extension;
 
 defined('_JEXEC') || die;
 
+use Exception;
+use JDatabaseQuery;
+use JDatabaseQueryElement;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Log\Log;
-use Joomla\CMS\Menu\AbstractMenu;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\Component\Content\Site\Model\ArticlesModel;
+use ReflectionObject;
 
-class plgSystemSortbyfield extends CMSPlugin
+class SortByField extends CMSPlugin
 {
 	/** @var CMSApplication */
 	public $app;
@@ -24,7 +30,7 @@ class plgSystemSortbyfield extends CMSPlugin
 	{
 		parent::__construct($subject, $config);
 
-		require_once 'library/buffer.php';
+		require_once __DIR__ . '/../Buffer.php';
 	}
 
 	/**
@@ -41,7 +47,7 @@ class plgSystemSortbyfield extends CMSPlugin
 	public function onAfterInitialise(): void
 	{
 		// Only applies to the frontend application
-		if (!is_object($this->app) || !($this->app instanceof SiteApplication))
+		if (!is_object($this->getApplication()) || !($this->getApplication() instanceof SiteApplication))
 		{
 			return;
 		}
@@ -50,31 +56,28 @@ class plgSystemSortbyfield extends CMSPlugin
 		$this->loadLanguage();
 
 		// Make sure the class isn't loaded yet
-		if (class_exists('ContentModelArticles', false))
+		if (class_exists(ArticlesModel::class, false))
 		{
-			Log::add('SortByFields: Cannot initialize. ContentModelArticles has already been loaded. Please reorder this plugin to be the first one loaded.', Log::CRITICAL);
+			Log::add('SortByFields: Cannot initialize. ArticlesModel has already been loaded. Please reorder this plugin to be the first one loaded.', Log::CRITICAL);
 
 			return;
 		}
 
 		// In-memory patching of Joomla's ContentModelArticles class
-		$source     = JPATH_SITE . '/components/com_content/models/articles.php';
+		$source     = JPATH_SITE . '/components/com_content/src/Model/ArticlesModel.php';
 		$foobar     = <<< PHP
 		// Import the appropriate plugin group.
-		\JPluginHelper::importPlugin('content');
-
-		// Get the app.
-		\$app = \Joomla\CMS\Factory::getApplication();
+		\Joomla\CMS\Plugin\PluginHelper::importPlugin('content');
 
 		// Trigger the form preparation event.
-		\$app->triggerEvent('onComContentArticlesGetListQuery', [&\$query]);
+		\Joomla\CMS\Factory::getApplication()->triggerEvent('onComContentArticlesGetListQuery', [\$query]);
 
 		return \$query;
 PHP;
 		$phpContent = file_get_contents($source);
 		$phpContent = str_replace('return $query;', $foobar, $phpContent);
 
-		$bufferLocation = 'plgSystemSortbyfieldsBuffer://plgSystemSortbyfieldsBuffer.php';
+		$bufferLocation = 'plgSystemSortbyfieldsBuffer://JoomlaArticlesContentModel.php';
 
 		file_put_contents($bufferLocation, $phpContent);
 
@@ -86,14 +89,12 @@ PHP;
 		$this->loadLanguage();
 		$this->loadLanguage('plg_system_sortbyfield.sys');
 
-		Form::addFormPath(__DIR__ . '/forms');
+		Form::addFormPath(__DIR__ . '/../../forms');
 
-		switch ($form->getName())
+		// A menu item is being added/edited
+		if ($form->getName() === 'com_menus.item')
 		{
-			// A menu item is being added/edited
-			case 'com_menus.item':
-				$form->loadFile('menu', false);
-				break;
+			$form->loadFile('menu', false);
 		}
 
 		return true;
@@ -102,13 +103,14 @@ PHP;
 	public function onContentBeforeSave(?string $context, $table, $isNew = false, $data = null): bool
 	{
 		// Joomla 4 Media Manager freaks out when the plugin is enabled; skip this plugin if the context is com_media.
-		if (substr($context, 0, 10) === 'com_media.') {
+		if (str_starts_with($context, 'com_media.'))
+		{
 			return true;
 		}
 		// Joomla 3 does not pass the data from com_menus. Therefore, we have to fake it.
 		if (is_null($data) && version_compare(JVERSION, '3.999.999', 'le'))
 		{
-			$input = $this->app->input;
+			$input = $this->getApplication()->input;
 			$data  = $input->get('jform', [], 'array');
 		}
 
@@ -120,11 +122,9 @@ PHP;
 
 		$key = null;
 
-		switch ($context)
+		if ($context === 'com_menus.item')
 		{
-			case 'com_menus.item':
-				$key = 'params';
-				break;
+			$key = 'params';
 		}
 
 		if (is_null($key))
@@ -138,15 +138,13 @@ PHP;
 		return true;
 	}
 
-	public function onContentPrepareData(?string $context, &$data)
+	public function onContentPrepareData(?string $context, $data)
 	{
 		$key = null;
 
-		switch ($context)
+		if ($context == 'com_menus.item')
 		{
-			case 'com_menus.item':
-				$key = 'params';
-				break;
+			$key = 'params';
 		}
 
 		if (is_null($key))
@@ -165,10 +163,13 @@ PHP;
 		return true;
 	}
 
-	public function onComContentArticlesGetListQuery(JDatabaseQuery &$query)
+	public function onComContentArticlesGetListQuery(JDatabaseQuery $query)
 	{
+		/** @var CMSApplication|mixed $app */
+		$app = $this->getApplication();
+
 		// Is this the frontend HTML application?
-		if (!is_object($this->app) || !($this->app instanceof CMSApplication))
+		if (!is_object($app) || !($app instanceof CMSApplication))
 		{
 			return;
 		}
@@ -176,10 +177,10 @@ PHP;
 		// Try to get the active menu item
 		try
 		{
-			$menu        = AbstractMenu::getInstance('site');
+			$menu        = $app->getMenu();
 			$currentItem = $menu->getActive();
 		}
-		catch (Exception $e)
+		catch (Exception)
 		{
 			return;
 		}

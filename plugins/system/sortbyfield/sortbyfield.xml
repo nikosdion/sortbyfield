@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--~
-  ~ * @project   sortbyfield
-  ~ * @license   GPLv3
-  ~ * @copyright Copyright (c) 2021 Nicholas K. Dionysopoulos
+  ~  @project   sortbyfield
+  ~  @license   GPLv3
+  ~  @copyright Copyright (c) 2021-2023 Nicholas K. Dionysopoulos
   -->
 
-<extension version="3.9.0" type="plugin" group="system" method="upgrade">
+<extension type="plugin" group="system" method="upgrade">
     <name>PLG_SYSTEM_SORTBYFIELD</name>
     <version>1.0.2</version>
     <creationDate>2021-03-27</creationDate>
@@ -15,19 +15,16 @@
     <authorEmail>no-reply@dionysopoulos.me</authorEmail>
     <authorUrl>https://www.dionysopoulos.me</authorUrl>
 
-    <copyright>Copyright (c)2020-2021 Nicholas K. Dionysopoulos</copyright>
+    <copyright>Copyright (c)2021-2023 Nicholas K. Dionysopoulos</copyright>
     <license>GNU GPL v3 or later</license>
 
     <description>PLG_SYSTEM_SORTBYFIELD_XML_DESC</description>
+    <namespace path="src">Dionysopoulos\Plugin\System\SortByField</namespace>
 
     <files>
-        <filename plugin="sortbyfield">sortbyfield.php</filename>
-        <folder>fields</folder>
         <folder>forms</folder>
-        <folder>library</folder>
-
-        <filename>.htaccess</filename>
-        <filename>web.config</filename>
+        <folder>services</folder>
+        <folder plugin="sortbyfield">src</folder>
     </files>
 
     <languages folder="language">
@@ -35,4 +32,5 @@
         <language tag="en-GB">en-GB/en-GB.plg_system_sortbyfield.sys.ini</language>
     </languages>
 
+    <scriptfile>script.php</scriptfile>
 </extension>
