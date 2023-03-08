@@ -7,7 +7,7 @@
       <imported>true</imported>
       <remarks>$USER_HOME$/Sites/dev3/configuration.php</remarks>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://127.0.0.1:3306/dev3</jdbc-url>
+      <jdbc-url>jdbc:mysql://127.0.0.1:3306/boot4</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

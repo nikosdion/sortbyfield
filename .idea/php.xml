@@ -12,11 +12,11 @@
   </component>
   <component name="PhpIncludePathManager">
     <include_path>
-      <path value="$PROJECT_DIR$/../../master/joomla-cms" />
-      <path value="$USER_HOME$/Sites/dev3/configuration.php" />
+      <path value="$PROJECT_DIR$/../../master/joomla4" />
+      <path value="/var/www/boot4/configuration.php" />
     </include_path>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />
+  <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />
   <component name="PhpStanOptionsConfiguration">
     <option name="transferred" value="true" />
   </component>
