@@ -1,8 +1,8 @@
 <?php
 /**
  * @project   sortbyfield
- * @license   GPLv3
  * @copyright Copyright (c) 2021-2023 Nicholas K. Dionysopoulos
+ * @license   GPLv3
  */
 
 namespace Dionysopoulos\Plugin\System\SortByField;
@@ -14,6 +14,7 @@ defined('_JEXEC') || die;
  *
  * @since 1.0.0
  */
+#[\AllowDynamicProperties]
 class Buffer
 {
 	/**
@@ -115,9 +116,11 @@ class Buffer
 				}
 
 				$whiteList = explode(',', $whiteList);
-				$whiteList = array_map(function ($x) {
-					return trim($x);
-				}, $whiteList);
+				$whiteList = array_map(
+					function ($x) {
+						return trim($x);
+					}, $whiteList
+				);
 
 				if (!in_array('fof://', $whiteList))
 				{
@@ -215,9 +218,9 @@ class Buffer
 	 *                   the total number of bytes in the stream is less than $count. Null if
 	 *                   the stream is empty.
 	 *
-	 * @see          streamWrapper::stream_read
 	 * @since        1.0.0
 	 * @noinspection PhpUnused
+	 * @see          streamWrapper::stream_read
 	 */
 	public function stream_read(int $count): string
 	{
@@ -234,14 +237,14 @@ class Buffer
 	 *
 	 * @return  integer
 	 *
-	 * @see          streamWrapper::stream_write
 	 * @since        1.0.0
 	 * @noinspection PhpUnused
+	 * @see          streamWrapper::stream_write
 	 */
 	public function stream_write(string $data): int
 	{
-		$left                         = substr(static::$buffers[$this->name], 0, $this->position);
-		$right                        = substr(static::$buffers[$this->name], $this->position + strlen($data));
+		$left                         = substr(static::$buffers[$this->name] ?? '', 0, $this->position);
+		$right                        = substr(static::$buffers[$this->name] ?? '', $this->position + strlen($data));
 		static::$buffers[$this->name] = $left . $data . $right;
 		$this->position               += strlen($data);
 
@@ -253,9 +256,9 @@ class Buffer
 	 *
 	 * @return  integer
 	 *
-	 * @see          streamWrapper::stream_tell
 	 * @since        1.0.0
 	 * @noinspection PhpUnused
+	 * @see          streamWrapper::stream_tell
 	 */
 	public function stream_tell(): int
 	{
@@ -267,9 +270,9 @@ class Buffer
 	 *
 	 * @return  boolean  True if the pointer is at the end of the stream
 	 *
-	 * @see          streamWrapper::stream_eof
 	 * @since        1.0.0
 	 * @noinspection PhpUnused
+	 * @see          streamWrapper::stream_eof
 	 */
 	public function stream_eof(): bool
 	{
@@ -285,9 +288,9 @@ class Buffer
 	 *
 	 * @return  boolean  True if updated
 	 *
-	 * @see          streamWrapper::stream_seek
 	 * @since        1.0.0
 	 * @noinspection PhpUnused
+	 * @see          streamWrapper::stream_seek
 	 */
 	public function stream_seek(int $offset, int $whence): bool
 	{

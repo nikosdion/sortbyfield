@@ -8,8 +8,8 @@
 
 <extension type="plugin" group="system" method="upgrade">
     <name>PLG_SYSTEM_SORTBYFIELD</name>
-    <version>2.0.0</version>
-    <creationDate>2023-03-08</creationDate>
+    <version>3.0.0</version>
+    <creationDate>2023-11-29</creationDate>
 
     <author>Nicholas K. Dionysopoulos</author>
     <authorEmail>no-reply@dionysopoulos.me</authorEmail>

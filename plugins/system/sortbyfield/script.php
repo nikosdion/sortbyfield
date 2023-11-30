@@ -12,7 +12,7 @@ use Joomla\CMS\Installer\InstallerScriptInterface;
 defined('_JEXEC') or die;
 
 return new class extends InstallerScript implements InstallerScriptInterface {
-	protected $minimumPhp = '8.0';
+	protected $minimumPhp = '8.1';
 
 	protected $minimumJoomla = '4.2';
 

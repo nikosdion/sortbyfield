@@ -1,8 +1,8 @@
 <?php
 /**
  * @project   sortbyfield
- * @license   GPLv3
  * @copyright Copyright (c) 2021-2023 Nicholas K. Dionysopoulos
+ * @license   GPLv3
  */
 
 namespace Dionysopoulos\Plugin\System\SortByField\Extension;
@@ -10,14 +10,14 @@ namespace Dionysopoulos\Plugin\System\SortByField\Extension;
 defined('_JEXEC') || die;
 
 use Exception;
-use JDatabaseQuery;
-use JDatabaseQueryElement;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Component\Content\Site\Model\ArticlesModel;
+use Joomla\Database\Query\QueryElement;
+use Joomla\Database\QueryInterface;
 use ReflectionObject;
 
 class SortByField extends CMSPlugin
@@ -58,7 +58,10 @@ class SortByField extends CMSPlugin
 		// Make sure the class isn't loaded yet
 		if (class_exists(ArticlesModel::class, false))
 		{
-			Log::add('SortByFields: Cannot initialize. ArticlesModel has already been loaded. Please reorder this plugin to be the first one loaded.', Log::CRITICAL);
+			Log::add(
+				'SortByFields: Cannot initialize. ArticlesModel has already been loaded. Please reorder this plugin to be the first one loaded.',
+				Log::CRITICAL
+			);
 
 			return;
 		}
@@ -163,7 +166,12 @@ PHP;
 		return true;
 	}
 
-	public function onComContentArticlesGetListQuery(JDatabaseQuery $query)
+	/**
+	 * @param   QueryInterface  $query
+	 *
+	 * @return  void
+	 */
+	public function onComContentArticlesGetListQuery(QueryInterface $query)
 	{
 		/** @var CMSApplication|mixed $app */
 		$app = $this->getApplication();
@@ -210,7 +218,7 @@ PHP;
 	/**
 	 * Order a category's articles by the values of a custom field
 	 *
-	 * @param   JDatabaseQuery  $query      The query to select articles from a category
+	 * @param   QueryInterface  $query      The query to select articles from a category
 	 * @param   int             $fieldId    Custom field ID
 	 * @param   string          $sortOrder  Sort order (ASC/DESC)
 	 *
@@ -218,7 +226,7 @@ PHP;
 	 *
 	 * @since   1.0.0
 	 */
-	private function orderByCustomField(JDatabaseQuery $query, int $fieldId, string $sortOrder): void
+	private function orderByCustomField(QueryInterface $query, int $fieldId, string $sortOrder): void
 	{
 		$query->leftJoin(
 			$query->qn('#__fields_values', 'jcsv' . $fieldId) . ' ON(' .
@@ -228,7 +236,7 @@ PHP;
 			')'
 		);
 
-		/** @var JDatabaseQueryElement $order */
+		/** @var QueryElement $order */
 		$order       = $query->order;
 		$elements    = $order->getElements();
 		$elements[0] = $query->qn(sprintf('jcsv%d.value', $fieldId)) . ' ' . $sortOrder . ', ' . $elements[0];
