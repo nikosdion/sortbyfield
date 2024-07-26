@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 
 <!--~
-  ~ * @project   sortbyfield
-  ~ * @license   GPLv3
-  ~ * @copyright Copyright (c) 2021 Nicholas K. Dionysopoulos
+  ~  @project   sortbyfield
+  ~  @license   GPLv3
+  ~  @copyright Copyright (c) 2021-2024 Nicholas K. Dionysopoulos
   -->
 
 <project name="SortByFields" description="SortByFields" default="git" >
-	<import file="${phing.dir}/../../buildfiles/phing/common.xml" />
+	<import file="${phing.dir}/../buildfiles/phing/common.xml" />
 
 	<!--
 	====================================================================================================
@@ -33,26 +33,5 @@
 				<include name="**" />
 			</fileset>
 		</zipme>
-	</target>
-
-
-	<!--
-	====================================================================================================
-	Tasks - Documentation
-	====================================================================================================
-	-->
-
-	<target name="documentation" description="The documentation">
-		<echo message="The documentation can be found in the repository's Wiki on GitHub. This task is obsolete." />
-	</target>
-
-	<!--
-	====================================================================================================
-	Tasks - Project management
-	====================================================================================================
-	-->
-
-	<target name="docsdeploy">
-		<echo message="The documentation can be found in the repository's Wiki on GitHub. This task is obsolete." />
 	</target>
 </project>
