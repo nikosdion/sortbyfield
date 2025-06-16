@@ -239,7 +239,7 @@ PHP;
 		/** @var QueryElement $order */
 		$order       = $query->order;
 		$elements    = $order->getElements();
-		$elements[0] = $query->qn(sprintf('jcsv%d.value', $fieldId)) . ' ' . $sortOrder . ', ' . $elements[0];
+		$elements[0] = 'CAST(' . $query->qn(sprintf('jcsv%d.value', $fieldId)) . ' AS SIGNED) ' . $sortOrder . ', ' . $elements[0];
 
 		$refOrder    = new ReflectionObject($order);
 		$refElements = $refOrder->getProperty('elements');
