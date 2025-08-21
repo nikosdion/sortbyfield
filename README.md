@@ -2,6 +2,11 @@
 
 A Joomla 4.2 or later plugin to sort the articles in a category by the value of a custom field.
 
+## NO LONGER MAINTAINED
+
+> [!WARNING]  
+> This software is no longer maintained. It **DOES NOT** support Joomla 6 or later versions.
+
 ## What is this?
 
 This is useful when making a category of events where the event date is stored in a Joomla!™ custom field. Create a menu
